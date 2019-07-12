@@ -96,8 +96,9 @@ int main() {
 		fread(&cCount, 1, 1, pFile);//*문자열 3을 읽어옴
 		int iMazeCount = atoi(&cCount);//*문자를 정수3으로 바꿔주는 함수
 		fread(&cCount, 1, 1, pFile);//* \n을 읽어오기위함
+
 		pMazeList = new char*[iMazeCount];//*포인터 배열 동적할당
-		for (int i = 0; i < iMazeCount; i++) {
+		for (int i = 0; i < iMazeCount; ++i) {
 			int iNameCount = 0;
 			pMazeList[i] = new char[256]; //*2차원 배열로 만들어버리기
 			while (true) {
@@ -111,13 +112,29 @@ int main() {
 			}
 			pMazeList[i][iNameCount] = 0;//*그리고 맨마지막에0을 넣음으로써 문자열의 끝임을 알린다
 		}
+		
 		fclose(pFile);
-		for (int i = 0; i < iMazeCount; i++) {
-			cout << i + 1 << "." << pMazeList[i] << endl;
-		}
-		cout << "미로를 하나 선택하세요:" << endl;
 		int select;
-		cin >> select;
+		while (1) {
+			system("cls");
+			for (int i = 0; i < iMazeCount; i++) {
+				cout << i + 1 << "." << pMazeList[i] << endl;
+			}
+			cout << "미로를 하나 선택하세요:";
+		
+			cin >> select;
+			if (cin.fail()) {
+				cin.clear();
+				cin.ignore(1024, '\n');
+				select = INT_MAX;
+			}
+			if (select < 1 || select>3 || select == INT_MAX) {
+				continue;
+			}
+			else
+				break;
+		}
+
 		fopen_s(&pFile, pMazeList[select - 1], "rt");
 		if (pFile) {
 			char pText;
@@ -127,8 +144,9 @@ int main() {
 			}
 			fclose(pFile);
 		}
+		
 	}
-
+	
 
 
 
